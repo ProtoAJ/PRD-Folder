@@ -131,6 +131,7 @@ Before writing, collect the following. If any are missing, ask for all of them i
 - Vague requirements ("improve performance")
 - "The user should see..." language
 - Repeating requirements across stories (cross-reference instead)
+- Emdashes
 - **Separate backend storage stories:** Data models, indexes, foreign keys are engineering's domain. Stories should be UI + behavior only. Implementation details don't belong in PRDs.
 
 ---
