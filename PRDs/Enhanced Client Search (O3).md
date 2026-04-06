@@ -13,7 +13,7 @@
 ## Problem Statement
 
 The existing client select dropdown searches and displays only a member's name, making it difficult for users to locate the correct member when two or more members share the same or similar names. There is no way to search by alternative identifiers such as Member ID, date of birth, or plan information, forcing users to rely solely on name recognition. This creates friction and the risk of selecting the wrong member — a significant concern in a healthcare context where acting on the wrong member record can have clinical and compliance consequences.
-ß
+
 ---
 
 ## Objective

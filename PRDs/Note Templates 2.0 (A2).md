@@ -94,30 +94,9 @@ Integrate a structured Template Framework into the existing note-taking interfac
       - **Template Text** (Required): Textarea, resizable, Rich Text.
          - Placeholder: "Enter template text here..."
          - Reference guide below textarea: "[DATE] → today's date [TIME] → current time [NAME] → selected client [ANY LABEL] → editable tab-stop field"
-      - **Template Tags**: 
+      - **Template Tags**: List of tags that are selected for the template. Shown as blue pills. List of tags updated from Tags tab. 
 
-#### 4. Add Create Template form
-   - Triggered by "+ Add Template" button
-   - Form fields:
-     - "Template Name" (required): Text input, no spaces allowed
-       - Placeholder: "e.g. contactvm (no spaces)"
-       - Helper text below field: "Called in the Notes field with `/templatename`" (auto-generates from input)
-     - "Template Text" (required): Textarea, resizable
-       - Placeholder: "Enter template text here..."
-       - Token reference guide below textarea: "`[DATE]` → today's date  `[TIME]` → current time  `[NAME]` → selected client  `[ANY LABEL]` → editable tab-stop field"
-     - "Template Tags": Multi-select dropdown
-       - Placeholder: "Select tags..."
-       - Options populated from tag vocabulary (Story 3)
-       - Selected tags display as removable pills with × dismiss
-   - "Save" button (green, primary) and "Cancel" button (red, secondary)
-
-#### 5. Add Edit Template form
-   - Triggered by "Edit" button in Actions column
-   - Same form layout as Create Template (requirement 4)
-   - All fields pre-populated with existing template values
-   - Template Tags displayed as removable pills with × dismiss and dropdown chevron
-
-#### 6. Enforce template governance rules
+#### 4. Enforce template governance rules
    - Trigger uniqueness: When saving, validate that no other template shares the same trigger name
      - Error message: "A template with the trigger `/[name]` already exists"
    - Soft-delete: When "Delete" clicked on a template with usage count > 0, display confirmation: "This template has been used in existing notes and cannot be permanently deleted. Archive instead?"
@@ -146,6 +125,17 @@ Integrate a structured Template Framework into the existing note-taking interfac
 *Location(s): Any Notes text field across Helios*
 
 **Requirements:**
+
+- Currently the note taking experience is this:
+   
+   [Legacy Note Process]
+- With templates being triggered by typing in the desired field like this:
+
+   [Legacy Templates Triggering]
+- **UPDATE** existing application to use "/" as the trigger
+   - Typing "/" in a note field will now trigger the list of templates in the system to display the slash command popover
+
+   [New / command popover]
 
 1. Detect slash trigger in Notes fields
    - When cursor is active in any Notes text field and user types `/`, display floating popover menu immediately below cursor position
