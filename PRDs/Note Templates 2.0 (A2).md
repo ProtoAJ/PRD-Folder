@@ -1,4 +1,4 @@
-# Notecue (Note Templates 2.0) (A2)
+#  Note Templates (A2)
 
 | Field | Value |
 |-------|-------|
@@ -6,7 +6,7 @@
 | **Helios Product** | Helios Core |
 | **Helios Domains** | All Domains |
 | **Product Theme** | Note Templates |
-| **Related Tickets** | [Discovery Document](https://virtualhealth.atlassian.net/wiki/spaces/PROD/pages/2260369412) |
+| **Related Tickets** | TBD |
 
 ---
 
@@ -14,33 +14,13 @@
 
 Documentation within Helios is a high-friction, manual process that relies on individual user discretion for formatting and content. Free-form note entry averages ~2 minutes per note, creates inconsistent terminology (e.g., "LVM," "left msg," "no answer" for the same event), and frequently omits mandatory compliance data points. Without structured entry, notes produce "dark data" that is difficult to audit, extract for reporting, or hand off between staff — creating legal, clinical, and operational risk.
 
----
-
 ## Objective
 
 Integrate a structured Template Framework into the existing note-taking interface, enabling slash-command triggers with auto-populated tokens, tab-through placeholder navigation, and a tag taxonomy that ties into the RBAC Field Permissions Criteria Builder. This provides the foundation for compliant, standardized documentation at scale while reducing average note creation time from ~2 minutes to under 20 seconds.
 
 ---
 
-## Designs & User Flows
-
-*Screenshots stored in `~/Documents/Claude/assets/note-templates/`*
-
-| Screen | File |
-|--------|------|
-| Template list view (Settings > Templates) | `~/Documents/Claude/assets/note-templates/template-list-view.png` |
-| Edit Template form with tag assignment | `~/Documents/Claude/assets/note-templates/edit-template-form.png` |
-| Add Template form | `~/Documents/Claude/assets/note-templates/add-template-form.png` |
-| Slash command popover in Notes field | `~/Documents/Claude/assets/note-templates/slash-command-popover.png` |
-| Template injection with auto-populated tokens, tab-stop placeholders, and tag bar | `~/Documents/Claude/assets/note-templates/template-injection.png` |
-
----
-
 ## Release Notes
-
-> Click to expand for full release details
-
-**Notecue (Note Templates 2.0)**
 
 **Feature Summary:** Structured note templates with slash-command triggers, auto-populated tokens, tab-through placeholders, and a tag system integrated with RBAC field permissions.
 
@@ -49,7 +29,6 @@ Integrate a structured Template Framework into the existing note-taking interfac
 2. Invoke templates in any Notes field via `/` trigger with real-time fuzzy search and keyboard-first selection
 3. Auto-populate `[DATE]`, `[TIME]`, and `[NAME]` tokens on insertion; tab through remaining placeholders
 4. Manage a controlled tag vocabulary applied to templates and surfaced on rendered notes
-5. Extend RBAC Criteria Builder to support Note Template Tags as a conditional field permission dimension
 
 **User Impact:** Eliminates "blank-page syndrome" for documentation. Staff type a slash command, select a template, tab through fields, and save — replacing 2-minute manual entries with ~15-second structured completions. Tags enable downstream reporting, filtering, and role-based access control over note content.
 
@@ -57,31 +36,67 @@ Integrate a structured Template Framework into the existing note-taking interfac
 
 ## User Stories & Requirements
 
-### Story 1: Template Configuration Screen - UI
+### Story 1: Template Configuration Screen Update - UI
 
-*Location(s): Super Admin > Settings > System Settings > Notecue (Note Templates 2.0)*
+*Location(s): Super Admin > Settings > System Settings > Note Templates*
 
-**Requirements:**
+#### 0. Note Templates Version Toggle
+- Add a version toggle with the following options:
+   - Legacy
+   - New
 
-1. Add Notecue (Note Templates 2.0) screen under System Settings
-   - New screen accessible from Super Admin > Settings > System Settings navigation
-   - Screen header: "Settings > Templates"
-   - Display "+ Add Template" button (blue, primary) and "< Back to Settings" button (gray, secondary) above template list
+***The following updates should only be visible when a Super Admin sets Version = "New"***
 
-2. Display template list table
-   - Table columns: Template Name, Template Text, Template Tags, Actions
-   - Template Name column displays trigger name prefixed with `/` (e.g., `/contactvm`)
-   - Template Text column displays template body as preview text (truncated with "..." if exceeds column width)
-   - Template Tags column displays assigned tags as pill badges (e.g., "External", "Provider")
-   - Actions column displays "Edit" button (blue) and "Delete" button (red) per row
-   - Table header row styled with blue background and white text
+#### 1. Note Templates Main Screen Update
+- Currently the Note Templates main screen appears as follows:
+      
+   [Legacy Note Templates Screen]
 
-3. Display empty state when no templates configured
-   - Message: "No templates configured"
-   - Subtext: "Create your first template to enable slash-command note entry"
-   - "+ Add Template" button displayed prominently
+- Clicking edit on the existing screen displays the following:
+      
+   [Legacy edit Note Template Screen]
 
-4. Add Create Template form
+- **UPDATE** existing configuration screen as follows:
+   - Settings > Note Template will now display the following tabs:
+      - Templates (Existing)
+      - Tags (New - Created in Story 2)
+
+      [New Main Screen]
+
+#### 2. Note Templates - Templates Tab Table Update
+   - **Template Name** (Required): Displays trigger name prefixed with / (e.g., /contactvm)
+      - Set to <> for any existing note Templates 
+   - **Template Text**: Displays template body as preview text, truncated with "..." if it exceeds column width
+      - Set to <> for any existing Note Templates
+   - **Template Tags**: Displays assigned tags as pill badges (e.g., "External", "Provider")
+      - Should be blank for existing templates by default - only applies if tags are added after feature release
+   - **Actions**: No change to existing options
+
+#### 3. Note Templates - Create or Update Templates Form
+   - Currently the create Notes Template screen appears as follows:
+
+      [Legacy Create Note Template]
+   
+   - **UPDATE** existing Add/Edit template form as follows:
+
+      [New Add Template Form]
+
+   - Create/Edit form header behavior:
+      - Clicking [+ Add New Template] from main page titles the form "Add Template"
+         - New templates will have all functionality outlined below.
+         - Editing a legacy template will populate Template Name with current name, and Template Text with name.
+            - Legacy templates will not have tags associated, and template tags field will be blank
+      - Clicking [Edit ] from actions column titles the form "Edit Template"
+   - Create/Edit Form Fields:
+      - **Template Name** (Required): Text input field, no spaces allowed.
+         - Placeholder: "e.g. contactvm (no spaces)"
+         - Helper text below field: "Called in the Notes field with /templatename" (Auto-generates from input)
+      - **Template Text** (Required): Textarea, resizable, Rich Text.
+         - Placeholder: "Enter template text here..."
+         - Reference guide below textarea: "[DATE] → today's date [TIME] → current time [NAME] → selected client [ANY LABEL] → editable tab-stop field"
+      - **Template Tags**: 
+
+#### 4. Add Create Template form
    - Triggered by "+ Add Template" button
    - Form fields:
      - "Template Name" (required): Text input, no spaces allowed
@@ -96,13 +111,13 @@ Integrate a structured Template Framework into the existing note-taking interfac
        - Selected tags display as removable pills with × dismiss
    - "Save" button (green, primary) and "Cancel" button (red, secondary)
 
-5. Add Edit Template form
+#### 5. Add Edit Template form
    - Triggered by "Edit" button in Actions column
    - Same form layout as Create Template (requirement 4)
    - All fields pre-populated with existing template values
    - Template Tags displayed as removable pills with × dismiss and dropdown chevron
 
-6. Enforce template governance rules
+#### 6. Enforce template governance rules
    - Trigger uniqueness: When saving, validate that no other template shares the same trigger name
      - Error message: "A template with the trigger `/[name]` already exists"
    - Soft-delete: When "Delete" clicked on a template with usage count > 0, display confirmation: "This template has been used in existing notes and cannot be permanently deleted. Archive instead?"
@@ -115,7 +130,7 @@ Integrate a structured Template Framework into the existing note-taking interfac
 
 | ID | Acceptance Criteria |
 |----|---------------------|
-| AC-1.1 | Verify Notecue (Note Templates 2.0) screen accessible from Super Admin > Settings > System Settings with correct header and navigation buttons |
+| AC-1.1 | Verify Note Templates screen accessible from Super Admin > Settings > System Settings with correct header and navigation buttons |
 | AC-1.2 | Test template list table displays Template Name (with `/` prefix), Template Text preview, Template Tags as pills, and Edit/Delete actions |
 | AC-1.3 | Verify empty state displays when no templates configured with correct messaging and prominent Add button |
 | AC-1.4 | Test Create Template form displays all fields with correct placeholders, token reference guide, and tag multi-select |
@@ -206,7 +221,7 @@ Integrate a structured Template Framework into the existing note-taking interfac
 **Requirements:**
 
 1. Add Note Template Tags screen under System Settings
-   - New screen accessible as sibling to Notecue (Note Templates 2.0) in Super Admin > Settings > System Settings navigation
+   - New screen accessible as sibling to Note Templates in Super Admin > Settings > System Settings navigation
    - Screen header: "Settings > Note Template Tags"
    - Display "+ Add Tag" button (blue, primary) and "< Back to Settings" button (gray, secondary) above tag list
 
@@ -247,56 +262,3 @@ Integrate a structured Template Framework into the existing note-taking interfac
 | AC-3.7 | Verify tags created here appear in Template Configuration multi-select, note component, and RBAC Criteria Builder |
 
 ---
-
-### Story 4: RBAC - Note Template Tags as Field Permission Criteria
-
-*Location(s): Admin portal > Settings > Permissions > [Access Level] > Field Permissions tab > Permission Set modal > Conditional Rule section*
-
-**Requirements:**
-
-1. Add "Note Template Tags" as a criteria dimension in the Criteria Builder
-   - When configuring a Field Permission Set's conditional rule (see [RBAC - Field Permissions PRD](RBAC%20-%20Field%20Permissions%20(A1,A3,A6,D14).md), Story 2, requirement 6), add "Note Template Tags" to the available criteria fields in the Criteria Builder dropdown
-   - Criteria field label: "Note Template Tags"
-   - Available operators: `equals`, `does not equal`, `contains any of`, `contains none of`
-   - Value selection: Multi-select dropdown populated from the tag vocabulary (Story 3)
-
-2. Enable tag-based conditional field permissions
-   - When a note has tags (inherited from template or manually applied), the Criteria Builder evaluates those tags against the conditional rule
-   - Example rules:
-     - IF Note Template Tags contains any of "External" THEN Hide
-     - IF Note Template Tags equals "Provider" THEN Show - View
-     - IF Note Template Tags contains none of "Internal" THEN Mask
-
-3. Evaluate tags using existing Criteria Builder engine
-   - Use same evaluation logic and engine as Record Filters criteria (no new evaluation framework)
-   - Tag criteria evaluated at note render time based on tags present on the note
-   - When note has no tags: Tag-based criteria evaluates to false, Default Permission applied
-
-**Acceptance Criteria:**
-
-| ID | Acceptance Criteria |
-|----|---------------------|
-| AC-4.1 | Verify "Note Template Tags" appears as a selectable criteria field in the Criteria Builder dropdown |
-| AC-4.2 | Test operators `equals`, `does not equal`, `contains any of`, `contains none of` available for tag criteria |
-| AC-4.3 | Verify value selection dropdown populated from tag vocabulary configured in Story 3 |
-| AC-4.4 | Test conditional rule evaluates correctly when note tags match criteria (THEN permission applied) |
-| AC-4.5 | Test conditional rule evaluates correctly when note tags do not match criteria (Default Permission applied) |
-| AC-4.6 | Verify notes with no tags default to Default Permission (tag criteria evaluates to false) |
-
----
-
-## Nice to Have
-
-1. **Tag Bar on Note Component**: After template injection, display a tags row below the note field. Template-assigned tags render as pre-selected filled pills (blue with checkmark). All other available tags from the vocabulary display as outlined/unselected pills, toggleable by the user. Tag state persists with the saved note. Example: `/contactvm` injects template with "External" and "Provider" pre-checked; "Internal", "Member / Patient", "Care Team", "Administrative" shown as unselected toggleable pills.
-
----
-
-## Feature Flag Requirements
-
-> Click to expand feature flag details
-
-**Is a feature flag required?** YES
-
-- **Flag Name:** NOTECUE
-- **Flag Purpose:** Controls access to Notecue (Note Templates 2.0) feature set. Enables gradual deployment to validate template engine performance, tag system integration, and user adoption before full release. Separates from any legacy note template functionality.
-- **Flag Owner:** @A.J. Meeks
